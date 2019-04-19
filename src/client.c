@@ -27,12 +27,25 @@ typedef struct urlinfo_t {
 */
 urlinfo_t *parse_url(char *url)
 {
+  /* printf("url: %s\n", url); */
   // copy the input URL so as not to mutate the original
   char *hostname = strdup(url);
   char *port;
   char *path;
 
   urlinfo_t *urlinfo = malloc(sizeof(urlinfo_t));
+
+  char backslash = '/';
+  char *return_string;
+  return_string = strchr(url, backslash);
+  if(return_string != NULL) {
+
+    path = &return_string[1];
+
+  }
+
+  printf("return string: %s\n", return_string);
+  printf("path: %s\n", path);
 
   /*
     We can parse the input URL by doing the following:
@@ -77,6 +90,7 @@ int send_request(int fd, char *hostname, char *port, char *path)
 
 int main(int argc, char *argv[])
 {  
+  parse_url(argv[1]);
   int sockfd, numbytes;  
   char buf[BUFSIZE];
 
@@ -92,6 +106,10 @@ int main(int argc, char *argv[])
     4. Call `recv` in a loop until there is no more data to receive from the server. Print the received response to stdout.
     5. Clean up any allocated memory and open file descriptors.
   */
+
+  /* while ((numbytes = recv(sockfd, buf, BUFSIZE - 1, 0)) > 0) { */
+  /*   //print the data we recvd to stdout */
+  /* } */
 
   ///////////////////
   // IMPLEMENT ME! //
