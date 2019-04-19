@@ -35,17 +35,43 @@ urlinfo_t *parse_url(char *url)
 
   urlinfo_t *urlinfo = malloc(sizeof(urlinfo_t));
 
+  /* checking for backslash and setting path */
+
   char backslash = '/';
   char *return_string;
-  return_string = strchr(url, backslash);
-  if(return_string != NULL) {
 
+  return_string = strchr(hostname, backslash); // this returns everything after the backslash
+
+  if(return_string == NULL) {
+    path = NULL;
+  } else {
     path = &return_string[1];
+    /* return_string[0] = '\0'; */
+    *return_string = '\0';
+  }
+  /* printf("return string: %s\n", return_string); */
+  /* printf("url: %s\n", url); */
 
+
+  /* checking for colon and setting port */
+
+  char colon = ':';
+  char *return_colon;
+  return_colon = strchr(hostname, colon); // returns everthing after the colon
+
+  if(return_colon == NULL) {
+    port = NULL;
+  } else {
+    port = &return_colon[1];
+    *return_colon = '\0';
   }
 
-  printf("return string: %s\n", return_string);
+
+  printf("port: %s\n", port);
+  /* printf("return colon: %s\n", return_colon); */
   printf("path: %s\n", path);
+  /* printf("hostname: %s\n", hostname); */
+  printf("hostname: %s\n", hostname);
 
   /*
     We can parse the input URL by doing the following:
@@ -90,7 +116,7 @@ int send_request(int fd, char *hostname, char *port, char *path)
 
 int main(int argc, char *argv[])
 {  
-  parse_url(argv[1]);
+  parse_url(argv[1]); // delete this later. Only for testing
   int sockfd, numbytes;  
   char buf[BUFSIZE];
 
@@ -98,6 +124,9 @@ int main(int argc, char *argv[])
     fprintf(stderr,"usage: client HOSTNAME:PORT/PATH\n");
     exit(1);
   }
+
+
+
 
   /*
     1. Parse the input URL
